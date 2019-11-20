@@ -99,3 +99,37 @@ LampName {
 .App-link {
   color: #09d3ac;
 }
+
+.RoomNameLiving {
+  position: relative;
+  left: -120px;
+  top: -290px;
+  background-color: black;
+  color: white;
+  font-size: 18px;
+
+  border: black 1px solid;
+}
+
+.RoomNameKitchen {
+  position: relative;
+  left: 70px;
+  top: -480px;
+  background-color: black;
+  color: white;
+  font-size: 18px;
+
+
+  border: black 1px solid;
+}
+
+.RoomNameEntrance {
+  position: relative;
+  left: -67px;
+  top: -178px;
+  background-color: black;
+  color: white;
+  font-size: 18px;
+
+  border: black 1px solid;
+}

@@ -4,7 +4,7 @@ import './App.css';
 import Man from './components/Man/Man';
 
 import openSocket from 'socket.io-client';
-const socket = openSocket("http://ab060bc6.ngrok.io");
+const socket = openSocket("http://fb8dc7ee.ngrok.io");
 
 var backStyle = {
   backgroundImage: "url(" + Background + ")",
@@ -143,8 +143,6 @@ class App extends React.Component {
     if(completed)
       status = "LampStatus";
 
-    console.log(bright, color, completed);
-
     let new_state = {
       lamps:this.state.lamps
     };
@@ -153,6 +151,7 @@ class App extends React.Component {
       color: color,
       status: status
     };
+
 
     this.setState(new_state);
   };
@@ -212,7 +211,7 @@ class App extends React.Component {
   };
 
   increaseLight = (count = 0, color = 3000, bright = 50) => {
-    let interval = 3000;
+    let interval = 1000;
 
     setTimeout(
         () => {
@@ -227,13 +226,16 @@ class App extends React.Component {
             color += 800;
             bright += 10;
             setTimeout(
-                () => this.increaseLight(count, color, bright),
+                () => {
+                  this.increaseLight(count, color, bright);
+                  this.changeColor(1, bright, color, true);
+                },
                 interval
             );
           } else {
             setTimeout(
                 () => socket.emit("blink", {}),
-                10000
+                3000
             );
           }
         },
@@ -254,10 +256,6 @@ class App extends React.Component {
   };
 
   manualScenat = () => {
-    // setTimeout(() => this.changeColor(1, 0, 0), 1000);
-    // setTimeout(() => this.changeColor(1, 100, 5000), 1300);
-    // setTimeout(() => this.changeColor(1, 0, 0), 1600);
-    // setTimeout(() => this.changeColor(1, 100, 5000), 1900);
     setTimeout(() => this.smoothlyChangeColor(2, 100, 2700), 1);
     setTimeout(() => this.move_man(0, 2), 10);
     setTimeout(() => this.move_man(2, 1), 5000);
@@ -276,10 +274,13 @@ class App extends React.Component {
     setTimeout(() => this.smoothlyChangeColor(1, 100, 2700), 27000);
     setTimeout(() => this.smoothlyChangeColor(2, 0, 2700), 28000);
     setTimeout(() => this.smoothlyChangeColor(1, 100, 5000), 31000);
-    setTimeout(() => this.changeColor(1, 0, 0, true), 35000, );
-    setTimeout(() => this.changeColor(1, 100, 5000, true), 35100,);
-    setTimeout(() => this.changeColor(1, 0, 0, true), 35200,);
-    setTimeout(() => this.changeColor(1, 100, 5000, true), 35300, );
+    setTimeout(() => this.changeColor(1, 0, 0, true), 35000,);
+    setTimeout(() => this.changeColor(1, 100, 5000, true), 35500,);
+    setTimeout(() => this.changeColor(1, 0, 0, true), 36000,);
+    setTimeout(() => this.changeColor(1, 100, 5000, true), 36500, );
+    setTimeout(() => this.changeColor(1, 0, 5000, true), 37000, );
+    setTimeout(() => this.changeColor(1, 100, 5000, true), 37500, );
+
   };
 
   componentDidMount() {
@@ -320,18 +321,20 @@ class App extends React.Component {
       this.smoothlyChangeColor(to, 100, 2700);
     });
 
-    this.manualScenat();
+     //this.manualScenat();
   }
 
   render = () => {
+    let state = this.state;
+
     return (
         <div className="App">
           <header className="App-header">
             <div style={backStyle}>
               <Man ref={this.manRef}/>
               {
-                Object.keys(this.state.lamps).map((key, index) => {
-                  let lamp = this.state.lamps[key];
+                Object.keys(state.lamps).map((key, index) => {
+                  let lamp = state.lamps[-(-key)];
 
                   return <div key={index} style={generateStyle(key, lamp.bright, lamp.color)}>
                   </div>
@@ -403,6 +406,21 @@ class App extends React.Component {
                   {this.state.status}
                 </span>
               </div>
+            </div>
+            <div className="RoomNameLiving">
+              <span>
+                Living room
+              </span>
+            </div>
+            <div className="RoomNameEntrance">
+              <span>
+                Entrance
+              </span>
+            </div>
+            <div className="RoomNameKitchen">
+              <span>
+                Kitchen
+              </span>
             </div>
           </header>
         </div>
